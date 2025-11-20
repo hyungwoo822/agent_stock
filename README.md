@@ -1,9 +1,9 @@
-agent_stock
-Portfolio Agent System
+# Portfolio Agent System
 
 A sophisticated multi-agent system for portfolio management that combines market intelligence, technical analysis, fundamental analysis, and portfolio optimization — all with human-in-the-loop decision making.
 
-📐 System Architecture
+## 📐 System Architecture
+```
 portfolio-agent/
 ├── agents/                    
 │   ├── supervisor.py           # Orchestrates all agents
@@ -44,61 +44,44 @@ portfolio-agent/
 ├── docker-compose.yml
 ├── Dockerfile
 └── requirements.txt
+```
 
-✨ Core Features
-1. Multi-Agent System
+## ✨ Core Features
 
-Supervisor Agent orchestrates all specialists
+### 1. Multi-Agent System
+- **Supervisor Agent** orchestrates all specialists
+- **Market Intelligence**: real-time market data, news, sentiment
+- **Technical Analyst**: indicators, chart patterns
+- **Fundamental Analyst**: company valuations, financial statements
+- **Portfolio Optimizer**: risk-adjusted construction (MPT)
+- **Execution Agent**: trade execution & order management
 
-Market Intelligence: real-time market data, news, sentiment
+### 2. Memory & Context
+- **Conversation Memory** (recent context)
+- **Execution Memory** (past trades)
+- **Knowledge Base** (research, documents)
+- Vector similarity search for retrieval
 
-Technical Analyst: indicators, chart patterns
+### 3. Safety & Reliability
+- Circuit breaker stops cascading failures
+- API rate limiting
+- Encryption for sensitive data
+- Human approval required for:
+  - Large trades
+  - Portfolio rebalancing
+  - High-risk decisions
+  - Stop-loss changes
 
-Fundamental Analyst: company valuations, financial statements
+## 🚀 Getting Started
 
-Portfolio Optimizer: risk-adjusted construction (MPT)
+### Prerequisites
+- Python 3.10+
+- Docker & Docker Compose
+- Market data API keys
 
-Execution Agent: trade execution & order management
-
-2. Memory & Context
-
-Conversation Memory (recent context)
-
-Execution Memory (past trades)
-
-Knowledge Base (research, documents)
-
-Vector similarity search for retrieval
-
-3. Safety & Reliability
-
-Circuit breaker stops cascading failures
-
-API rate limiting
-
-Encryption for sensitive data
-
-Human approval required for:
-
-large trades
-
-portfolio rebalancing
-
-high-risk decisions
-
-stop-loss changes
-
-🚀 Getting Started
-Prerequisites
-
-Python 3.10+
-
-Docker & Docker Compose
-
-Market data API keys
-
-🛠 Installation
-git clone <repository-url>
+### 🛠 Installation
+```bash
+git clone 
 cd portfolio-agent
 
 # Install dependencies
@@ -107,11 +90,12 @@ pip install -r requirements.txt
 # Configure environment
 cp .env.example .env
 # Edit .env with your API keys
+```
 
-⚙ Configuration
+### ⚙ Configuration
 
-Edit config/settings.py or use environment variables:
-
+Edit `config/settings.py` or use environment variables:
+```python
 # API Keys
 OPENAI_API_KEY=your_key
 MARKET_DATA_API_KEY=your_key
@@ -123,16 +107,24 @@ AWS_REGION=us-east-1
 # Risk Parameters
 MAX_POSITION_SIZE=0.1
 MAX_PORTFOLIO_RISK=0.15
+```
 
-▶ Running the System
-Docker
+### ▶ Running the System
+
+**Docker:**
+```bash
 docker-compose up -d
+```
 
-Local
+**Local:**
+```bash
 python -m workflow.portfolio_workflow
+```
 
-📘 Usage Examples
-Basic Portfolio Analysis
+## 📘 Usage Examples
+
+### Basic Portfolio Analysis
+```python
 from workflow.portfolio_workflow import PortfolioWorkflow
 
 workflow = PortfolioWorkflow()
@@ -141,8 +133,10 @@ result = workflow.run({
     "user_query": "Analyze my tech portfolio and suggest rebalancing",
     "portfolio": current_holdings
 })
+```
 
-With Human-in-the-Loop
+### With Human-in-the-Loop
+```python
 from human_loop.interface import HumanLoopInterface
 
 interface = HumanLoopInterface()
@@ -151,105 +145,87 @@ result = interface.execute_with_approval(
     action="rebalance_portfolio",
     recommendations=agent_recommendations
 )
+```
 
-🔁 Agent Workflow
+## 🔁 Agent Workflow
+```
 User Query → Supervisor → [Parallel Analysis]
                            ├─ Market Intelligence
                            ├─ Technical Analysis
                            └─ Fundamental Analysis
            
 Analysis Results → Portfolio Optimizer → Human Review → Execution
+```
 
-🧠 Memory System
+## 🧠 Memory System
 
-Conversation Memory → chat & analysis history
-
-Execution Memory → trade history
-
-Knowledge Base → research documents
+- **Conversation Memory** → chat & analysis history
+- **Execution Memory** → trade history
+- **Knowledge Base** → research documents
 
 Vector similarity search pulls relevant prior analyses.
 
-🛡 Safety Features
+## 🛡 Safety Features
 
-Circuit Breaker: stops trading on repeated failures
+- **Circuit Breaker**: stops trading on repeated failures
+- **Rate Limiting**: controls API usage
+- **Human-in-the-Loop**: required for dangerous or expensive actions
 
-Rate Limiting: controls API usage
+## 🧪 Development
 
-Human-in-the-Loop: required for dangerous or expensive actions
+### Adding New Agents
 
-🧪 Development
-Adding New Agents
+1. Create agent in `agents/`
+2. Add tools in `tools/`
+3. Register in `workflow/portfolio_workflow.py`
+4. Update state schema in `workflow/state.py`
 
-Create agent in agents/
-
-Add tools in tools/
-
-Register in workflow/portfolio_workflow.py
-
-Update state schema in workflow/state.py
-
-Testing
+### Testing
+```bash
 pytest tests/
 pytest --cov=. tests/
+```
 
-📊 Monitoring & Observability
+## 📊 Monitoring & Observability
 
-LangSmith tracing
+- LangSmith tracing
+- Structured logging
+- Error alerts
+- Performance metrics
 
-Structured logging
+## 🔐 Security
 
-Error alerts
+- API keys via env
+- Encrypted sensitive data
+- Trade audit logs
+- Role-based approvals
 
-Performance metrics
+## ⚡ Performance
 
-🔐 Security
+- Parallel agent execution
+- Caching for common queries
+- Optimized vector search
+- Smart rate limiting
 
-API keys via env
+## 📈 Future Enhancements
 
-Encrypted sensitive data
+- [ ] Backtesting framework
+- [ ] Multi-portfolio support
+- [ ] Advanced risk models (VaR, CVaR)
+- [ ] More brokerage integrations
+- [ ] Mobile approval app
+- [ ] Advanced sentiment analysis
 
-Trade audit logs
+## 🤝 Contributing
 
-Role-based approvals
+Contributions welcome! Please read `CONTRIBUTING.md` before submitting PRs.
 
-⚡ Performance
+## 📄 License
 
-Parallel agent execution
+MIT License — see `LICENSE`.
 
-Caching for common queries
+## 🆘 Support
 
-Optimized vector search
-
-Smart rate limiting
-
-📈 Future Enhancements
-
-Backtesting framework
-
-Multi-portfolio support
-
-Advanced risk models (VaR, CVaR)
-
-More brokerage integrations
-
-Mobile approval app
-
-Advanced sentiment analysis
-
-🤝 Contributing
-
-Contributions welcome!
-Please read CONTRIBUTING.md before submitting PRs.
-
-📄 License
-
-MIT License — see LICENSE.
-
-🆘 Support
-
-GitHub Issues: (link)
-
-Documentation: (link)
-
-Email: support@example.com
+- **GitHub Issues**: [link]
+- **Documentation**: [link]
+- **Email**: support@example.com
