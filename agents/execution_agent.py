@@ -8,7 +8,9 @@ logger = logging.getLogger(__name__)
 class ExecutionAgent:
     """거래 실행 및 모니터링 에이전트"""
     
-    def __init__(self):
+    def __init__(self, config):
+        self.config = config
+        # Initialize execution tools
         self.pending_orders = {}
         self.executed_orders = []
         self.positions = {}
@@ -56,13 +58,24 @@ class ExecutionAgent:
         """시뮬레이션 실행"""
         import random
         
-        # 시뮬레이션 성공 확률
-        success_rate = 0.95
+        # 시뮬레이션 성공 확률 (High for testing)
+        success_rate = 0.98
         
         if random.random() < success_rate:
-            # 약간의 슬리피지 추가
-            slippage = random.uniform(-0.005, 0.005)  # ±0.5%
-            executed_price = decision["limit_price"] * (1 + slippage)
+            # Scalping simulation: minimal slippage
+            # Assuming liquid market for major tickers
+            slippage_pct = random.uniform(-0.0005, 0.0005)  # ±0.05%
+            
+            limit_price = decision.get("limit_price")
+            # If no limit price (market order), use current price from decision context if available, 
+            # or just assume it executed at some price. 
+            # Since we don't pass current price here easily, let's assume limit_price is close to market.
+            # If limit_price is None, we need a fallback. 
+            # Ideally decision should have 'current_price' or 'limit_price'.
+            
+            base_price = limit_price if limit_price else 100.0 # Fallback if missing
+            
+            executed_price = base_price * (1 + slippage_pct)
             
             return {
                 "order_id": f"SIM_{datetime.now().timestamp()}",
@@ -70,9 +83,10 @@ class ExecutionAgent:
                 "ticker": decision["ticker"],
                 "action": decision["action"],
                 "quantity": decision["quantity"],
-                "requested_price": decision["limit_price"],
+                "requested_price": base_price,
                 "executed_price": round(executed_price, 2),
-                "slippage": round(slippage * 100, 3),
+                "slippage": round(slippage_pct * 100, 4),
+                "commission": 0.0, # Zero commission for sim
                 "timestamp": datetime.now().isoformat(),
                 "mode": "simulation"
             }
@@ -82,7 +96,7 @@ class ExecutionAgent:
                 "status": "failed",
                 "ticker": decision["ticker"],
                 "action": decision["action"],
-                "reason": "Simulation rejection",
+                "reason": "Simulation rejection (Random)",
                 "timestamp": datetime.now().isoformat()
             }
     

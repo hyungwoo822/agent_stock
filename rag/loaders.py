@@ -1,36 +1,36 @@
 from typing import List, Dict
 import requests
 from bs4 import BeautifulSoup
-import yfinance as yf
+# import yfinance as yf (Removed)
 from datetime import datetime
 import logging
 
 logger = logging.getLogger(__name__)
 
 class YahooFinanceLoader:
-    """Yahoo Finance 데이터 로더"""
+    """Yahoo Finance 데이터 로더 (Replaced with FinanceDataReader)"""
     
     def load(self, tickers: List[str]) -> List[Dict]:
         """티커별 데이터 로드"""
         documents = []
         
+        import FinanceDataReader as fdr
+        from datetime import datetime, timedelta
+        
         for ticker in tickers:
             try:
-                stock = yf.Ticker(ticker)
-                info = stock.info
-                
-                # 회사 정보 문서
+                # 회사 정보 문서 (Stubbed)
                 company_doc = {
                     "content": f"""
-                    Company: {info.get('longName', ticker)}
-                    Sector: {info.get('sector', 'N/A')}
-                    Industry: {info.get('industry', 'N/A')}
-                    Market Cap: ${info.get('marketCap', 0):,.0f}
-                    PE Ratio: {info.get('trailingPE', 'N/A')}
-                    Description: {info.get('longBusinessSummary', 'N/A')[:500]}
+                    Company: {ticker}
+                    Sector: Unknown
+                    Industry: Unknown
+                    Market Cap: N/A
+                    PE Ratio: N/A
+                    Description: Data for {ticker} fetched via FinanceDataReader
                     """,
                     "metadata": {
-                        "source": "yahoo_finance",
+                        "source": "finance_datareader",
                         "ticker": ticker,
                         "type": "company_info",
                         "timestamp": datetime.now().isoformat()
@@ -39,19 +39,21 @@ class YahooFinanceLoader:
                 documents.append(company_doc)
                 
                 # 최근 가격 데이터
-                hist = stock.history(period="1mo")
-                if not hist.empty:
+                start_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+                df = fdr.DataReader(ticker, start=start_date)
+                
+                if not df.empty:
                     price_doc = {
                         "content": f"""
                         Ticker: {ticker}
-                        Current Price: ${hist['Close'].iloc[-1]:.2f}
-                        Month High: ${hist['High'].max():.2f}
-                        Month Low: ${hist['Low'].min():.2f}
-                        Volume: {hist['Volume'].iloc[-1]:,.0f}
-                        Price Change (Month): {((hist['Close'].iloc[-1] - hist['Close'].iloc[0]) / hist['Close'].iloc[0] * 100):.2f}%
+                        Current Price: ${df['Close'].iloc[-1]:.2f}
+                        Month High: ${df['High'].max():.2f}
+                        Month Low: ${df['Low'].min():.2f}
+                        Volume: {df['Volume'].iloc[-1]:,.0f} if 'Volume' in df.columns else N/A
+                        Price Change (Month): {((df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100):.2f}%
                         """,
                         "metadata": {
-                            "source": "yahoo_finance",
+                            "source": "finance_datareader",
                             "ticker": ticker,
                             "type": "price_data",
                             "timestamp": datetime.now().isoformat()

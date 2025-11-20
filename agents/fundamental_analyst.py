@@ -3,19 +3,21 @@ from tools.analysis_tools import ValuationMetricsTool
 from tools.market_tools import YahooFinanceTool
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
-from config.settings import config
+from config.settings import config as global_config
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 class FundamentalAnalystAgent:
     """기본적 분석 전문가 에이전트"""
     
-    def __init__(self):
+    def __init__(self, config):
+        self.user_config = config
         self.llm = ChatOpenAI(
-            model=config.LLM_MODEL,
-            temperature=0.2,
-            api_key=config.OPENAI_API_KEY
+            model=global_config.LLM_MODEL,
+            temperature=0.3,
+            api_key=global_config.OPENAI_API_KEY
         )
         self.valuation_tool = ValuationMetricsTool()
         self.yahoo_tool = YahooFinanceTool()

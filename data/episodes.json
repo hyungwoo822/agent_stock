@@ -1,0 +1,39 @@
+[
+  {
+    "id": "ep_1763618317.167593",
+    "timestamp": "2025-11-20T14:58:37.167602",
+    "decision": [
+      {
+        "ticker": "NVDA",
+        "action": "buy",
+        "quantity": 1,
+        "reason": "Both technical and fundamental signals are positive, indicating a strong buy opportunity."
+      }
+    ],
+    "outcome": {
+      "timestamp": "2025-11-20T14:58:37.167340",
+      "mode": "simulation",
+      "orders": [
+        {
+          "order_id": "SIM_1763618317.167372",
+          "status": "executed",
+          "ticker": "NVDA",
+          "action": "buy",
+          "quantity": 1,
+          "requested_price": 100.0,
+          "executed_price": 99.97,
+          "slippage": -0.0327,
+          "commission": 0.0,
+          "timestamp": "2025-11-20T14:58:37.167398",
+          "mode": "simulation"
+        }
+      ],
+      "failed_orders": [],
+      "total_executed": 1,
+      "total_failed": 0
+    },
+    "context": {
+      "market": "summary"
+    }
+  }
+]

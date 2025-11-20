@@ -3,20 +3,22 @@ from datetime import datetime, timedelta
 from tools.market_tools import YahooFinanceTool, NewsAggregatorTool
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
-from config.settings import config
+from config.settings import config as global_config
 import asyncio
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 class MarketIntelligenceAgent:
     """시장 정보 수집 및 분석 에이전트"""
     
-    def __init__(self):
+    def __init__(self, config):
+        self.user_config = config
         self.llm = ChatOpenAI(
-            model=config.LLM_MODEL,
+            model=global_config.LLM_MODEL,
             temperature=0.3,
-            api_key=config.OPENAI_API_KEY
+            api_key=global_config.OPENAI_API_KEY
         )
         self.yahoo_tool = YahooFinanceTool()
         self.news_tool = NewsAggregatorTool()
@@ -62,20 +64,38 @@ class MarketIntelligenceAgent:
     async def _get_ticker_data(self, ticker: str) -> Dict:
         """개별 종목 데이터 수집"""
         try:
-            # 가격 데이터
-            price_data = self.yahoo_tool._run(ticker, "price", "1mo")
+            # User requested simple usage with FinanceDataReader
+            import FinanceDataReader as fdr
+            from datetime import datetime, timedelta
             
-            # 뉴스
-            news_data = self.yahoo_tool._run(ticker, "news", "1mo")
+            # Calculate start date for 1 month
+            start_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
             
-            # 기업 정보
-            info_data = self.yahoo_tool._run(ticker, "info", "1mo")
+            # Fetch data
+            df = fdr.DataReader(ticker, start=start_date)
+            
+            if df.empty:
+                return {"ticker": ticker, "error": "No data found"}
+                
+            # Construct price data manually
+            current_price = df['Close'].iloc[-1]
+            
+            # Convert index to string for JSON serialization
+            df.index = df.index.strftime('%Y-%m-%d')
+            
+            price_data = {
+                "ticker": ticker,
+                "current_price": float(current_price),
+                "history": df.to_dict(),
+                "volume": int(df['Volume'].iloc[-1]) if 'Volume' in df.columns and len(df) > 0 else 0,
+                "change_percent": ((df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100) if len(df) > 1 else 0
+            }
             
             return {
                 "ticker": ticker,
                 "price": price_data,
-                "news": news_data,
-                "info": info_data,
+                "news": [], # Placeholder
+                "info": {}, # Placeholder
                 "analysis_timestamp": datetime.now().isoformat()
             }
         except Exception as e:

@@ -13,10 +13,6 @@ class Config:
     NEWS_API_KEY: str = os.getenv("NEWS_API_KEY")
     ALPHA_VANTAGE_API_KEY: str = os.getenv("ALPHA_VANTAGE_API_KEY")
     
-    # AWS Configuration
-    AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")
-    S3_BUCKET: str = os.getenv("S3_BUCKET", "portfolio-memory")
-    
     # Redis Configuration
     REDIS_HOST: str = os.getenv("REDIS_HOST", "localhost")
     REDIS_PORT: int = int(os.getenv("REDIS_PORT", 6379))

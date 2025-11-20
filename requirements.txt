@@ -28,3 +28,9 @@ newspaper3k==0.2.8
 fastapi
 uvicorn
 redis
+httpx==0.27.2
+finance-datareader
+chromadb
+langchain-community
+pytest
+pytest-asyncio

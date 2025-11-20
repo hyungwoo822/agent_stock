@@ -1,0 +1,233 @@
+2025-11-20 14:04:43,527 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:04:43,864 - __main__ - ERROR - Critical error: name 'os' is not defined
+2025-11-20 14:05:14,451 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:05:14,652 - __main__ - ERROR - Critical error: 1 validation error for ChatOpenAI
+__root__
+  Client.__init__() got an unexpected keyword argument 'proxies' (type=type_error)
+2025-11-20 14:08:07,798 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:08:08,016 - __main__ - ERROR - Critical error: 'UserConfig' object has no attribute 'LLM_MODEL'
+2025-11-20 14:10:08,687 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:10:08,930 - __main__ - ERROR - Critical error: 'UserConfig' object has no attribute 'OPENAI_API_KEY'
+2025-11-20 14:11:01,284 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:11:01,511 - __main__ - ERROR - Critical error: name 'configs' is not defined
+2025-11-20 14:11:13,139 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:11:13,408 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:11:13,408 - agents.supervisor - INFO - Monitoring tickers: ['SPY', 'QQQ', 'AAPL', 'MSFT', 'NVDA']
+2025-11-20 14:11:13,408 - agents.supervisor - INFO - Update interval: 60 minutes
+2025-11-20 14:11:13,408 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:11:13.408977
+2025-11-20 14:11:15,708 - yfinance - ERROR - Failed to get ticker 'SPY' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:16,712 - yfinance - ERROR - SPY: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:11:17,704 - tools.market_tools - ERROR - Yahoo Finance error for SPY: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/SPY?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:18,683 - tools.market_tools - ERROR - Yahoo Finance error for SPY: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:19,707 - tools.market_tools - ERROR - Yahoo Finance error for SPY: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/SPY?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:20,690 - yfinance - ERROR - Failed to get ticker 'QQQ' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:21,681 - yfinance - ERROR - QQQ: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:11:22,668 - tools.market_tools - ERROR - Yahoo Finance error for QQQ: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/QQQ?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:23,659 - tools.market_tools - ERROR - Yahoo Finance error for QQQ: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:24,714 - tools.market_tools - ERROR - Yahoo Finance error for QQQ: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/QQQ?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:25,753 - yfinance - ERROR - Failed to get ticker 'AAPL' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:26,749 - yfinance - ERROR - AAPL: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:11:27,787 - tools.market_tools - ERROR - Yahoo Finance error for AAPL: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/AAPL?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:28,789 - tools.market_tools - ERROR - Yahoo Finance error for AAPL: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:29,825 - tools.market_tools - ERROR - Yahoo Finance error for AAPL: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/AAPL?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:30,864 - yfinance - ERROR - Failed to get ticker 'MSFT' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:31,800 - yfinance - ERROR - MSFT: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:11:32,790 - tools.market_tools - ERROR - Yahoo Finance error for MSFT: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/MSFT?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:33,783 - tools.market_tools - ERROR - Yahoo Finance error for MSFT: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:34,775 - tools.market_tools - ERROR - Yahoo Finance error for MSFT: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/MSFT?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:35,673 - yfinance - ERROR - Failed to get ticker 'NVDA' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:36,664 - yfinance - ERROR - NVDA: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:11:37,655 - tools.market_tools - ERROR - Yahoo Finance error for NVDA: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/NVDA?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:38,598 - tools.market_tools - ERROR - Yahoo Finance error for NVDA: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:39,538 - tools.market_tools - ERROR - Yahoo Finance error for NVDA: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/NVDA?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:11:53,795 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:11:53,809 - agents.supervisor - INFO - Market analysis completed
+2025-11-20 14:11:53,810 - tools.analysis_tools - ERROR - Technical analysis error for SPY: name 'yf' is not defined
+2025-11-20 14:11:53,811 - yfinance - ERROR - Failed to get ticker 'SPY' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:11:54,849 - yfinance - ERROR - SPY: No price data found, symbol may be delisted (period=3mo)
+2025-11-20 14:12:14,416 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:12:14,420 - tools.analysis_tools - ERROR - Technical analysis error for QQQ: name 'yf' is not defined
+2025-11-20 14:12:14,422 - yfinance - ERROR - Failed to get ticker 'QQQ' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:12:15,425 - yfinance - ERROR - QQQ: No price data found, symbol may be delisted (period=3mo)
+2025-11-20 14:12:34,420 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:12:34,433 - tools.analysis_tools - ERROR - Technical analysis error for AAPL: name 'yf' is not defined
+2025-11-20 14:12:34,435 - yfinance - ERROR - Failed to get ticker 'AAPL' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:12:35,436 - yfinance - ERROR - AAPL: No price data found, symbol may be delisted (period=3mo)
+2025-11-20 14:12:51,049 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:12:51,056 - tools.analysis_tools - ERROR - Technical analysis error for MSFT: name 'yf' is not defined
+2025-11-20 14:12:51,058 - yfinance - ERROR - Failed to get ticker 'MSFT' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:12:52,050 - yfinance - ERROR - MSFT: No price data found, symbol may be delisted (period=3mo)
+2025-11-20 14:13:11,069 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:13:11,073 - tools.analysis_tools - ERROR - Technical analysis error for NVDA: name 'yf' is not defined
+2025-11-20 14:13:11,075 - yfinance - ERROR - Failed to get ticker 'NVDA' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:13:12,063 - yfinance - ERROR - NVDA: No price data found, symbol may be delisted (period=3mo)
+2025-11-20 14:13:28,798 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:13:28,806 - agents.supervisor - INFO - Technical analysis completed
+2025-11-20 14:13:28,807 - tools.analysis_tools - ERROR - Valuation analysis error for SPY: name 'yf' is not defined
+2025-11-20 14:13:32,700 - tools.market_tools - ERROR - Yahoo Finance error for SPY: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/SPY?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:13:33,627 - tools.market_tools - ERROR - Yahoo Finance error for SPY: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/SPY?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:13:51,180 - agents.supervisor - INFO - Stopping bot...
+2025-11-20 14:16:20,373 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:16:20,660 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:16:20,660 - agents.supervisor - INFO - Monitoring tickers: ['SPY', 'QQQ', 'AAPL', 'MSFT', 'NVDA']
+2025-11-20 14:16:20,660 - agents.supervisor - INFO - Update interval: 60 minutes
+2025-11-20 14:16:20,660 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:16:20.660457
+2025-11-20 14:16:22,704 - yfinance - ERROR - Failed to get ticker 'SPY' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:16:23,727 - yfinance - ERROR - SPY: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:16:24,739 - tools.market_tools - ERROR - Yahoo Finance error for SPY: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/SPY?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:16:25,726 - tools.market_tools - ERROR - Yahoo Finance error for SPY: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:16:26,693 - tools.market_tools - ERROR - Yahoo Finance error for SPY: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/SPY?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:16:27,704 - yfinance - ERROR - Failed to get ticker 'QQQ' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:16:28,707 - yfinance - ERROR - QQQ: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:16:29,124 - agents.supervisor - INFO - Stopping bot...
+2025-11-20 14:23:55,848 - __main__ - INFO - Bot stopped by user
+2025-11-20 14:24:03,818 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:24:04,091 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:24:04,091 - agents.supervisor - INFO - Monitoring tickers: ['SPY', 'QQQ', 'AAPL', 'MSFT', 'NVDA']
+2025-11-20 14:24:04,091 - agents.supervisor - INFO - Update interval: 60 minutes
+2025-11-20 14:24:04,091 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:24:04.091230
+2025-11-20 14:24:05,753 - yfinance - ERROR - Failed to get ticker 'SPY' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:24:06,706 - yfinance - ERROR - SPY: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:24:07,314 - agents.supervisor - INFO - Stopping bot...
+2025-11-20 14:28:34,295 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:28:34,569 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:28:34,569 - agents.supervisor - INFO - Monitoring tickers: ['SPY', 'QQQ', 'AAPL', 'MSFT', 'NVDA']
+2025-11-20 14:28:34,569 - agents.supervisor - INFO - Update interval: 60 minutes
+2025-11-20 14:28:34,569 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:28:34.569876
+2025-11-20 14:28:36,248 - yfinance - ERROR - Failed to get ticker 'SPY' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:28:37,307 - yfinance - ERROR - SPY: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:28:38,347 - tools.market_tools - ERROR - Yahoo Finance error for SPY: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:28:39,387 - tools.market_tools - ERROR - Yahoo Finance error for SPY: 429 Client Error: Too Many Requests for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/SPY?modules=financialData%2CquoteType%2CdefaultKeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=Edge%3A+Too+Many+Requests
+2025-11-20 14:28:39,862 - agents.supervisor - INFO - Stopping bot...
+2025-11-20 14:30:25,926 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:30:26,202 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:30:26,202 - agents.supervisor - INFO - Monitoring tickers: ['SPY', 'QQQ', 'AAPL', 'MSFT', 'NVDA']
+2025-11-20 14:30:26,202 - agents.supervisor - INFO - Update interval: 60 minutes
+2025-11-20 14:30:26,202 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:30:26.202736
+2025-11-20 14:30:27,599 - yfinance - ERROR - Failed to get ticker 'SPY' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:30:28,545 - yfinance - ERROR - SPY: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:30:29,516 - yfinance - ERROR - Failed to get ticker 'QQQ' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:30:30,511 - yfinance - ERROR - QQQ: No price data found, symbol may be delisted (period=1mo)
+2025-11-20 14:30:31,511 - yfinance - ERROR - Failed to get ticker 'AAPL' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:30:32,343 - agents.supervisor - INFO - Stopping bot...
+2025-11-20 14:35:49,520 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:35:49,796 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:35:49,796 - agents.supervisor - INFO - Monitoring tickers: ['SPY', 'QQQ', 'AAPL', 'MSFT', 'NVDA']
+2025-11-20 14:35:49,796 - agents.supervisor - INFO - Update interval: 60 minutes
+2025-11-20 14:35:49,796 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:35:49.796425
+2025-11-20 14:36:00,218 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:36:00,232 - agents.supervisor - INFO - Market analysis completed
+2025-11-20 14:36:02,251 - yfinance - ERROR - Failed to get ticker 'SPY' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:36:03,151 - yfinance - ERROR - SPY: No price data found, symbol may be delisted (period=3mo)
+2025-11-20 14:36:18,807 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:36:20,176 - yfinance - ERROR - Failed to get ticker 'QQQ' reason: Expecting value: line 1 column 1 (char 0)
+2025-11-20 14:36:21,088 - yfinance - ERROR - QQQ: No price data found, symbol may be delisted (period=3mo)
+2025-11-20 14:36:26,272 - agents.supervisor - INFO - Stopping bot...
+2025-11-20 14:36:52,506 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:36:52,779 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:36:52,779 - agents.supervisor - INFO - Monitoring tickers: ['SPY', 'QQQ', 'AAPL', 'MSFT', 'NVDA']
+2025-11-20 14:36:52,779 - agents.supervisor - INFO - Update interval: 60 minutes
+2025-11-20 14:36:52,779 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:36:52.779423
+2025-11-20 14:37:04,042 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:37:04,056 - agents.supervisor - INFO - Market analysis completed
+2025-11-20 14:37:22,205 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:37:40,079 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:37:57,708 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:38:15,064 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:38:32,498 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:38:32,506 - agents.supervisor - INFO - Technical analysis completed
+2025-11-20 14:38:32,803 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:38:32,803 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:38:53,251 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:38:53,536 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:38:53,537 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:39:16,383 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:39:16,747 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:39:16,748 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:39:35,529 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:39:35,861 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:39:35,862 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:39:51,440 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:39:51,766 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:39:51,766 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:40:09,839 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:40:09,845 - agents.supervisor - INFO - Fundamental analysis completed
+2025-11-20 14:40:09,845 - agents.supervisor - INFO - Decisions made: 0 actions
+2025-11-20 14:40:09,845 - agents.supervisor - INFO - Cycle completed. Sleeping for 3402.93 seconds
+2025-11-20 14:46:46,149 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:46:46,434 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:46:46,434 - agents.supervisor - INFO - Monitoring tickers: ['NVDA']
+2025-11-20 14:46:46,434 - agents.supervisor - INFO - Update interval: 1 minutes
+2025-11-20 14:46:46,434 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:46:46.434843
+2025-11-20 14:46:58,400 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:46:58,414 - agents.supervisor - INFO - Market analysis completed
+2025-11-20 14:47:15,195 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:47:15,199 - agents.supervisor - INFO - Technical analysis completed
+2025-11-20 14:47:15,483 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:47:15,484 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:47:34,281 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:47:34,287 - agents.supervisor - INFO - Fundamental analysis completed
+2025-11-20 14:47:36,562 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:47:36,573 - agents.supervisor - INFO - Decisions made: 1 actions
+2025-11-20 14:47:36,574 - agents.execution_agent - ERROR - Execution error for {'ticker': 'NVDA', 'action': 'buy', 'quantity': 1, 'reason': 'Both technical and fundamental signals are positive, aligning with aggressive risk tolerance.'}: 'limit_price'
+2025-11-20 14:47:36,574 - agents.supervisor - INFO - Execution completed: {'timestamp': '2025-11-20T14:47:36.574262', 'mode': 'simulation', 'orders': [], 'failed_orders': [{'decision': {'ticker': 'NVDA', 'action': 'buy', 'quantity': 1, 'reason': 'Both technical and fundamental signals are positive, aligning with aggressive risk tolerance.'}, 'error': "'limit_price'"}], 'total_executed': 0, 'total_failed': 1}
+2025-11-20 14:47:36,575 - agents.supervisor - INFO - Cycle completed. Sleeping for 9.86 seconds
+2025-11-20 14:47:46,445 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:47:46.445688
+2025-11-20 14:47:54,077 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:47:54,084 - agents.supervisor - INFO - Market analysis completed
+2025-11-20 14:48:12,828 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:48:12,832 - agents.supervisor - INFO - Technical analysis completed
+2025-11-20 14:48:13,152 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:48:13,153 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:48:31,131 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:48:31,137 - agents.supervisor - INFO - Fundamental analysis completed
+2025-11-20 14:48:35,424 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:48:35,448 - agents.supervisor - INFO - Decisions made: 1 actions
+2025-11-20 14:48:35,448 - agents.execution_agent - ERROR - Execution error for {'ticker': 'NVDA', 'action': 'buy', 'quantity': 1, 'reason': 'Both technical and fundamental signals are positive, aligning with an aggressive risk tolerance strategy.'}: 'limit_price'
+2025-11-20 14:48:35,448 - agents.supervisor - INFO - Execution completed: {'timestamp': '2025-11-20T14:48:35.448280', 'mode': 'simulation', 'orders': [], 'failed_orders': [{'decision': {'ticker': 'NVDA', 'action': 'buy', 'quantity': 1, 'reason': 'Both technical and fundamental signals are positive, aligning with an aggressive risk tolerance strategy.'}, 'error': "'limit_price'"}], 'total_executed': 0, 'total_failed': 1}
+2025-11-20 14:48:35,449 - agents.supervisor - INFO - Cycle completed. Sleeping for 11.00 seconds
+2025-11-20 14:48:46,457 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:48:46.457306
+2025-11-20 14:48:55,181 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:48:55,187 - agents.supervisor - INFO - Market analysis completed
+2025-11-20 14:49:12,170 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:49:12,176 - agents.supervisor - INFO - Technical analysis completed
+2025-11-20 14:49:12,456 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:49:12,457 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:49:31,146 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:49:31,150 - agents.supervisor - INFO - Fundamental analysis completed
+2025-11-20 14:49:33,336 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:49:33,346 - agents.supervisor - INFO - Decisions made: 1 actions
+2025-11-20 14:49:33,347 - agents.execution_agent - ERROR - Execution error for {'ticker': 'NVDA', 'action': 'buy', 'quantity': 1, 'reason': 'Both technical and fundamental signals are positive, aligning with aggressive risk tolerance.'}: 'limit_price'
+2025-11-20 14:49:33,347 - agents.supervisor - INFO - Execution completed: {'timestamp': '2025-11-20T14:49:33.347134', 'mode': 'simulation', 'orders': [], 'failed_orders': [{'decision': {'ticker': 'NVDA', 'action': 'buy', 'quantity': 1, 'reason': 'Both technical and fundamental signals are positive, aligning with aggressive risk tolerance.'}, 'error': "'limit_price'"}], 'total_executed': 0, 'total_failed': 1}
+2025-11-20 14:49:33,348 - agents.supervisor - INFO - Cycle completed. Sleeping for 13.11 seconds
+2025-11-20 14:49:46,471 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:49:46.470911
+2025-11-20 14:49:55,335 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:49:55,340 - agents.supervisor - INFO - Market analysis completed
+2025-11-20 14:50:01,118 - agents.supervisor - INFO - Stopping bot...
+2025-11-20 14:57:54,979 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:57:55,278 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:57:55,279 - agents.supervisor - INFO - Monitoring tickers: ['SPY', 'QQQ', 'AAPL', 'MSFT', 'NVDA']
+2025-11-20 14:57:55,279 - agents.supervisor - INFO - Update interval: 60 minutes
+2025-11-20 14:57:55,279 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:57:55.279225
+2025-11-20 14:57:55,285 - agents.supervisor - INFO - Running scheduled Fundamental Analysis
+2025-11-20 14:57:55,667 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:57:55,668 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:58:02,957 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:58:14,615 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-20 14:58:14,908 - agents.supervisor - INFO - Starting Trading Bot in simulation mode
+2025-11-20 14:58:14,908 - agents.supervisor - INFO - Monitoring tickers: ['NVDA']
+2025-11-20 14:58:14,908 - agents.supervisor - INFO - Update interval: 60 minutes
+2025-11-20 14:58:14,908 - agents.supervisor - INFO - Starting cycle at 2025-11-20 14:58:14.908685
+2025-11-20 14:58:14,914 - agents.supervisor - INFO - Running scheduled Fundamental Analysis
+2025-11-20 14:58:15,195 - tools.market_tools - WARNING - FinanceDataReader does not support detailed financials. Returning empty.
+2025-11-20 14:58:15,196 - tools.market_tools - WARNING - FinanceDataReader does not support company info. Returning minimal data.
+2025-11-20 14:58:20,513 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:58:30,597 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:58:32,369 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:58:32,382 - agents.supervisor - INFO - Analysis completed
+2025-11-20 14:58:37,150 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-20 14:58:37,167 - agents.supervisor - INFO - Decisions made: 1 actions
+2025-11-20 14:58:37,167 - agents.supervisor - INFO - Execution completed: {'timestamp': '2025-11-20T14:58:37.167340', 'mode': 'simulation', 'orders': [{'order_id': 'SIM_1763618317.167372', 'status': 'executed', 'ticker': 'NVDA', 'action': 'buy', 'quantity': 1, 'requested_price': 100.0, 'executed_price': 99.97, 'slippage': -0.0327, 'commission': 0.0, 'timestamp': '2025-11-20T14:58:37.167398', 'mode': 'simulation'}], 'failed_orders': [], 'total_executed': 1, 'total_failed': 0}
+2025-11-20 14:58:37,168 - agents.supervisor - INFO - Position Report: Total Value: $99.97, Total P&L: $0.0
+2025-11-20 14:58:37,168 - agents.supervisor - INFO -   NVDA: 1 shares, P&L: $0.0 (0.0%)
+2025-11-20 14:58:37,168 - agents.supervisor - INFO - Cycle completed in 22.26s. Sleeping for 3577.74 seconds

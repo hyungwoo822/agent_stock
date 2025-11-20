@@ -1,4 +1,4 @@
-import yfinance as yf
+import FinanceDataReader as fdr
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -22,79 +22,101 @@ class YahooFinanceInput(BaseModel):
 
 class YahooFinanceTool(BaseTool):
     name = "yahoo_finance"
-    description = "Fetch real-time stock data, financials, and company information from Yahoo Finance"
+    description = "Fetch real-time stock data from FinanceDataReader (replacing Yahoo Finance)"
     args_schema = YahooFinanceInput
     
     @CircuitBreaker(failure_threshold=3, recovery_timeout=60)
     @rate_limiter.limit("yahoo", config.API_RATE_LIMIT["yahoo"], 3600)
     def _run(self, ticker: str, data_type: str, period: str = "1mo") -> Dict:
-        """Yahoo Finance 데이터 가져오기"""
+        """FinanceDataReader 데이터 가져오기"""
         try:
-            stock = yf.Ticker(ticker)
-            
             if data_type == "price":
                 # 가격 데이터
-                hist = stock.history(period=period)
-                current_price = stock.info.get('currentPrice', 0)
+                start_date = self._get_start_date(period)
+                df = fdr.DataReader(ticker, start=start_date)
+                
+                if df.empty:
+                    return {"error": "No price data found", "ticker": ticker}
+                
+                current_price = df['Close'].iloc[-1]
+                
+                # Calculate change
+                if len(df) > 1:
+                    change_percent = ((df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100)
+                else:
+                    change_percent = 0
+                
+                # Convert index to string for JSON serialization
+                df.index = df.index.strftime('%Y-%m-%d')
                 
                 return {
                     "ticker": ticker,
-                    "current_price": current_price,
-                    "history": hist.to_dict(),
-                    "volume": int(hist['Volume'].iloc[-1]) if len(hist) > 0 else 0,
-                    "change_percent": ((hist['Close'].iloc[-1] - hist['Close'].iloc[0]) / hist['Close'].iloc[0] * 100) if len(hist) > 1 else 0
+                    "current_price": float(current_price),
+                    "history": df.to_dict(),
+                    "volume": int(df['Volume'].iloc[-1]) if 'Volume' in df.columns and len(df) > 0 else 0,
+                    "change_percent": change_percent
                 }
                 
             elif data_type == "financials":
-                # 재무제표
-                financials = {
-                    "income_statement": stock.income_stmt.to_dict() if hasattr(stock, 'income_stmt') else {},
-                    "balance_sheet": stock.balance_sheet.to_dict() if hasattr(stock, 'balance_sheet') else {},
-                    "cash_flow": stock.cash_flow.to_dict() if hasattr(stock, 'cash_flow') else {},
-                    "key_metrics": {
-                        "PE": stock.info.get('trailingPE', 0),
-                        "PB": stock.info.get('priceToBook', 0),
-                        "EPS": stock.info.get('trailingEps', 0),
-                        "ROE": stock.info.get('returnOnEquity', 0),
-                        "Debt_to_Equity": stock.info.get('debtToEquity', 0),
-                        "Profit_Margin": stock.info.get('profitMargins', 0)
-                    }
+                # FDR doesn't support financials directly in the same way
+                logger.warning("FinanceDataReader does not support detailed financials. Returning empty.")
+                return {
+                    "income_statement": {},
+                    "balance_sheet": {},
+                    "cash_flow": {},
+                    "key_metrics": {}
                 }
-                return financials
                 
             elif data_type == "info":
-                # 회사 정보
-                info = stock.info
+                # FDR doesn't support company info directly
+                logger.warning("FinanceDataReader does not support company info. Returning minimal data.")
                 return {
-                    "company_name": info.get('longName', ''),
-                    "sector": info.get('sector', ''),
-                    "industry": info.get('industry', ''),
-                    "market_cap": info.get('marketCap', 0),
-                    "employees": info.get('fullTimeEmployees', 0),
-                    "description": info.get('longBusinessSummary', ''),
-                    "website": info.get('website', ''),
-                    "headquarters": f"{info.get('city', '')}, {info.get('country', '')}"
+                    "company_name": ticker,
+                    "sector": "Unknown",
+                    "industry": "Unknown",
+                    "market_cap": 0,
+                    "description": f"Data for {ticker}"
                 }
                 
             elif data_type == "news":
-                # 뉴스
-                news = stock.news[:10] if hasattr(stock, 'news') else []
+                # FDR doesn't support news
+                logger.warning("FinanceDataReader does not support news. Returning empty.")
                 return {
                     "ticker": ticker,
-                    "news": [
-                        {
-                            "title": item.get('title', ''),
-                            "publisher": item.get('publisher', ''),
-                            "link": item.get('link', ''),
-                            "timestamp": datetime.fromtimestamp(item.get('providerPublishTime', 0)).isoformat()
-                        }
-                        for item in news
-                    ]
+                    "news": []
                 }
                 
         except Exception as e:
-            logger.error(f"Yahoo Finance error for {ticker}: {e}")
+            logger.error(f"FinanceDataReader error for {ticker}: {e}")
             return {"error": str(e), "ticker": ticker}
+
+    def _get_start_date(self, period: str) -> str:
+        """기간 문자열을 시작 날짜로 변환"""
+        now = datetime.now()
+        if period == "1d":
+            start = now - timedelta(days=1)
+        elif period == "5d":
+            start = now - timedelta(days=5)
+        elif period == "1mo":
+            start = now - timedelta(days=30)
+        elif period == "3mo":
+            start = now - timedelta(days=90)
+        elif period == "6mo":
+            start = now - timedelta(days=180)
+        elif period == "1y":
+            start = now - timedelta(days=365)
+        elif period == "2y":
+            start = now - timedelta(days=730)
+        elif period == "5y":
+            start = now - timedelta(days=1825)
+        elif period == "10y":
+            start = now - timedelta(days=3650)
+        elif period == "ytd":
+            start = datetime(now.year, 1, 1)
+        else:
+            start = now - timedelta(days=30) # Default 1mo
+            
+        return start.strftime('%Y-%m-%d')
 
 class NewsAggregatorInput(BaseModel):
     keywords: List[str] = Field(description="Keywords to search for")

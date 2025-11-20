@@ -1,184 +1,37 @@
 import json
-import pickle
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Dict, List, Any, Optional
-import numpy as np
-import boto3
 from langchain.memory import ConversationBufferMemory
-from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings
-import redis
 from config.settings import config
-
-class S3VectorStore:
-    def __init__(self, bucket: str, prefix: str = "vectors"):
-        self.s3_client = boto3.client('s3', region_name=config.AWS_REGION)
-        self.bucket = bucket
-        self.prefix = prefix
-        self.embeddings = OpenAIEmbeddings(model=config.EMBEDDING_MODEL)
-        self.local_store = FAISS.from_texts(["initialization"], self.embeddings)
-        
-    def add_documents(self, texts: List[str], metadatas: List[Dict] = None):
-        """증분 업데이트 - Delta만 추가"""
-        # 임베딩 생성
-        embeddings = self.embeddings.embed_documents(texts)
-        
-        # 로컬 FAISS에 추가
-        self.local_store.add_texts(texts, metadatas)
-        
-        # S3에 저장 (증분 방식)
-        timestamp = datetime.now().isoformat()
-        delta_key = f"{self.prefix}/delta_{timestamp}.pkl"
-        
-        delta_data = {
-            "texts": texts,
-            "embeddings": embeddings,
-            "metadatas": metadatas,
-            "timestamp": timestamp
-        }
-        
-        self.s3_client.put_object(
-            Bucket=self.bucket,
-            Key=delta_key,
-            Body=pickle.dumps(delta_data)
-        )
-        
-        # 일정 크기 이상이면 컴팩션
-        if len(self.local_store.docstore._dict) > 10000:
-            self._compact_vectors()
-    
-    def _compact_vectors(self):
-        """벡터 컴팩션 - 오래된 델타 병합"""
-        # S3에서 모든 델타 파일 목록 가져오기
-        response = self.s3_client.list_objects_v2(
-            Bucket=self.bucket,
-            Prefix=f"{self.prefix}/delta_"
-        )
-        
-        if 'Contents' not in response:
-            return
-        
-        # 30일 이상 된 델타 파일들 병합
-        cutoff_date = datetime.now() - timedelta(days=30)
-        old_deltas = []
-        
-        for obj in response['Contents']:
-            key_date = obj['Key'].split('delta_')[1].split('.')[0]
-            if datetime.fromisoformat(key_date) < cutoff_date:
-                old_deltas.append(obj['Key'])
-        
-        if len(old_deltas) > 10:  # 10개 이상일 때만 컴팩션
-            self._merge_deltas(old_deltas)
-    
-    def similarity_search(self, query: str, k: int = 5) -> List[Dict]:
-        """유사도 검색"""
-        return self.local_store.similarity_search_with_score(query, k=k)
-
-class EpisodeMemory:
-    """특정 거래 에피소드 기억"""
-    def __init__(self):
-        self.redis_client = redis.Redis(
-            host=config.REDIS_HOST,
-            port=config.REDIS_PORT,
-            decode_responses=True
-        )
-        self.episode_key_prefix = "episode:"
-    
-    def store_episode(self, episode_id: str, episode_data: Dict):
-        """거래 에피소드 저장"""
-        key = f"{self.episode_key_prefix}{episode_id}"
-        
-        episode = {
-            "timestamp": datetime.now().isoformat(),
-            "decision": episode_data.get("decision"),
-            "context": episode_data.get("context"),
-            "outcome": episode_data.get("outcome"),
-            "profit_loss": episode_data.get("profit_loss"),
-            "lessons_learned": episode_data.get("lessons_learned")
-        }
-        
-        self.redis_client.hset(key, mapping={
-            k: json.dumps(v) if isinstance(v, dict) else v
-            for k, v in episode.items()
-        })
-        
-        # TTL 설정 (90일)
-        self.redis_client.expire(key, 90 * 24 * 3600)
-    
-    def get_similar_episodes(self, context: Dict, limit: int = 5) -> List[Dict]:
-        """유사한 과거 에피소드 검색"""
-        # 모든 에피소드 키 가져오기
-        pattern = f"{self.episode_key_prefix}*"
-        episode_keys = self.redis_client.keys(pattern)
-        
-        episodes = []
-        for key in episode_keys:
-            episode_data = self.redis_client.hgetall(key)
-            episode = {
-                k: json.loads(v) if k in ['context', 'outcome'] else v
-                for k, v in episode_data.items()
-            }
-            
-            # 컨텍스트 유사도 계산 (간단한 버전)
-            similarity = self._calculate_similarity(context, episode.get('context', {}))
-            episode['similarity'] = similarity
-            episodes.append(episode)
-        
-        # 유사도 순으로 정렬
-        episodes.sort(key=lambda x: x['similarity'], reverse=True)
-        return episodes[:limit]
-    
-    def _calculate_similarity(self, context1: Dict, context2: Dict) -> float:
-        """간단한 유사도 계산"""
-        if not context2:
-            return 0.0
-        
-        common_keys = set(context1.keys()) & set(context2.keys())
-        if not common_keys:
-            return 0.0
-        
-        similarity = 0
-        for key in common_keys:
-            if context1[key] == context2[key]:
-                similarity += 1
-        
-        return similarity / len(set(context1.keys()) | set(context2.keys()))
+from memory.local_memory import LocalVectorStore, LocalEpisodeMemory
 
 class UserProfileStore:
-    """사용자 투자 성향 저장"""
-    def __init__(self):
-        self.redis_client = redis.Redis(
-            host=config.REDIS_HOST,
-            port=config.REDIS_PORT,
-            decode_responses=True
-        )
-    
-    def update_profile(self, user_id: str, profile_data: Dict):
-        """사용자 프로필 업데이트"""
-        key = f"user_profile:{user_id}"
+    """User investment profile storage (Local JSON)"""
+    def __init__(self, filepath: str = "./data/user_profile.json"):
+        self.filepath = filepath
         
+    def update_profile(self, user_id: str, profile_data: Dict):
+        """Update user profile"""
         profile = {
             "risk_tolerance": profile_data.get("risk_tolerance", "moderate"),
             "investment_horizon": profile_data.get("investment_horizon", "long_term"),
-            "preferred_sectors": json.dumps(profile_data.get("preferred_sectors", [])),
-            "avoided_sectors": json.dumps(profile_data.get("avoided_sectors", [])),
+            "preferred_sectors": profile_data.get("preferred_sectors", []),
+            "avoided_sectors": profile_data.get("avoided_sectors", []),
             "target_return": profile_data.get("target_return", 0.15),
             "max_drawdown": profile_data.get("max_drawdown", 0.20),
-            "rebalancing_frequency": profile_data.get("rebalancing_frequency", "monthly"),
-            "tax_strategy": profile_data.get("tax_strategy", "standard"),
             "updated_at": datetime.now().isoformat()
         }
         
-        self.redis_client.hset(key, mapping=profile)
+        with open(self.filepath, 'w') as f:
+            json.dump(profile, f, indent=2)
     
     def get_profile(self, user_id: str) -> Dict:
-        """사용자 프로필 조회"""
-        key = f"user_profile:{user_id}"
-        profile_data = self.redis_client.hgetall(key)
-        
-        if not profile_data:
-            # 기본 프로필 생성
-            default_profile = {
+        """Get user profile"""
+        try:
+            with open(self.filepath, 'r') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return {
                 "risk_tolerance": "moderate",
                 "investment_horizon": "long_term",
                 "preferred_sectors": [],
@@ -186,19 +39,9 @@ class UserProfileStore:
                 "target_return": 0.15,
                 "max_drawdown": 0.20
             }
-            self.update_profile(user_id, default_profile)
-            return default_profile
-        
-        # JSON 필드 파싱
-        profile_data['preferred_sectors'] = json.loads(profile_data.get('preferred_sectors', '[]'))
-        profile_data['avoided_sectors'] = json.loads(profile_data.get('avoided_sectors', '[]'))
-        profile_data['target_return'] = float(profile_data.get('target_return', 0.15))
-        profile_data['max_drawdown'] = float(profile_data.get('max_drawdown', 0.20))
-        
-        return profile_data
 
 class HybridMemorySystem:
-    """통합 메모리 시스템"""
+    """Integrated Memory System (Local)"""
     def __init__(self, user_id: str):
         self.user_id = user_id
         
@@ -209,27 +52,24 @@ class HybridMemorySystem:
             return_messages=True
         )
         
-        # Long-term Memory (S3 Vectors)
-        self.long_term = S3VectorStore(
-            bucket=config.S3_BUCKET,
-            prefix=f"users/{user_id}/vectors"
-        )
+        # Long-term Memory (Local ChromaDB)
+        self.long_term = LocalVectorStore(collection_name=f"user_{user_id}_vectors")
         
-        # Episode Memory
-        self.episode_memory = EpisodeMemory()
+        # Episode Memory (Local JSON)
+        self.episode_memory = LocalEpisodeMemory()
         
         # User Profile
         self.user_profile = UserProfileStore()
         
     def add_interaction(self, message: str, response: str, metadata: Dict = None):
-        """상호작용 추가"""
-        # Short-term에 추가
+        """Add interaction to memory"""
+        # Short-term
         self.short_term.save_context(
             {"input": message},
             {"output": response}
         )
         
-        # Long-term에 추가 (중요한 정보만)
+        # Long-term (if important)
         if metadata and metadata.get("importance", 0) > 0.7:
             combined_text = f"User: {message}\nAssistant: {response}"
             self.long_term.add_documents(
@@ -238,7 +78,7 @@ class HybridMemorySystem:
             )
     
     def search_relevant_memory(self, query: str, memory_type: str = "all") -> List[Dict]:
-        """관련 메모리 검색"""
+        """Search relevant memory"""
         results = []
         
         if memory_type in ["all", "short"]:
@@ -253,18 +93,18 @@ class HybridMemorySystem:
             # Long-term memory search
             similar_docs = self.long_term.similarity_search(query, k=5)
             results.extend([
-                {"type": "long_term", "content": doc[0].page_content, "score": doc[1]}
+                {"type": "long_term", "content": doc[0], "score": doc[2]}
                 for doc in similar_docs
             ])
         
         if memory_type in ["all", "episode"]:
-            # Episode memory search
-            context = {"query": query}
-            episodes = self.episode_memory.get_similar_episodes(context, limit=3)
+            # Episode memory search (simplified for local)
+            episodes = self.episode_memory.get_recent_episodes(limit=3)
             results.extend([
                 {"type": "episode", "content": episode}
                 for episode in episodes
             ])
         
         return results
+
 

@@ -5,16 +5,20 @@ from langchain.prompts import ChatPromptTemplate
 from config.settings import config
 import logging
 
+from config.settings import config as global_config
+
 logger = logging.getLogger(__name__)
 
 class TechnicalAnalystAgent:
     """기술적 분석 전문가 에이전트"""
     
-    def __init__(self):
+    def __init__(self, config):
+        self.user_config = config
+        # Initialize any tools or models if needed using config
         self.llm = ChatOpenAI(
-            model=config.LLM_MODEL,
-            temperature=0.2,
-            api_key=config.OPENAI_API_KEY
+            api_key=global_config.OPENAI_API_KEY,
+            model=global_config.LLM_MODEL,
+            temperature=0.2,            
         )
         self.indicator_tool = TechnicalIndicatorsTool()
         
@@ -119,9 +123,11 @@ class TechnicalAnalystAgent:
     def _calculate_support_resistance(self, ticker: str) -> Dict:
         """지지/저항 레벨 계산"""
         try:
-            import yfinance as yf
-            stock = yf.Ticker(ticker)
-            df = stock.history(period="3mo")
+            import FinanceDataReader as fdr
+            from datetime import datetime, timedelta
+            
+            start_date = (datetime.now() - timedelta(days=90)).strftime('%Y-%m-%d')
+            df = fdr.DataReader(ticker, start=start_date)
             
             if df.empty:
                 return {}

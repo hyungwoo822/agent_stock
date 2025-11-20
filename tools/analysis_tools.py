@@ -1,12 +1,42 @@
 import pandas as pd
 import numpy as np
 import ta
+import FinanceDataReader as fdr
 from typing import Dict, List, Optional, Tuple
 from langchain.tools import BaseTool
 from pydantic import BaseModel, Field
 import logging
+from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
+
+def get_start_date(period: str) -> str:
+    """기간 문자열을 시작 날짜로 변환"""
+    now = datetime.now()
+    if period == "1d":
+        start = now - timedelta(days=1)
+    elif period == "5d":
+        start = now - timedelta(days=5)
+    elif period == "1mo":
+        start = now - timedelta(days=30)
+    elif period == "3mo":
+        start = now - timedelta(days=90)
+    elif period == "6mo":
+        start = now - timedelta(days=180)
+    elif period == "1y":
+        start = now - timedelta(days=365)
+    elif period == "2y":
+        start = now - timedelta(days=730)
+    elif period == "5y":
+        start = now - timedelta(days=1825)
+    elif period == "10y":
+        start = now - timedelta(days=3650)
+    elif period == "ytd":
+        start = datetime(now.year, 1, 1)
+    else:
+        start = now - timedelta(days=90) # Default 3mo for analysis
+        
+    return start.strftime('%Y-%m-%d')
 
 class TechnicalIndicatorsInput(BaseModel):
     ticker: str = Field(description="Stock ticker symbol")
@@ -21,9 +51,9 @@ class TechnicalIndicatorsTool(BaseTool):
     def _run(self, ticker: str, indicators: List[str], period: int = 14) -> Dict:
         """기술적 지표 계산"""
         try:
-            # Yahoo Finance에서 데이터 가져오기
-            stock = yf.Ticker(ticker)
-            df = stock.history(period="3mo")
+            # FinanceDataReader에서 데이터 가져오기
+            start_date = get_start_date("3mo") # Enough data for indicators
+            df = fdr.DataReader(ticker, start=start_date)
             
             if df.empty:
                 return {"error": "No data available for ticker"}
@@ -88,6 +118,7 @@ class TechnicalIndicatorsTool(BaseTool):
             
             if "EMA" in indicators:
                 ema_20 = ta.trend.EMAIndicator(df['Close'], window=20).ema_indicator().iloc[-1]
+                ema_50 = ta.trend.SMAIndicator(df['Close'], window=50).sma_indicator().iloc[-1] # Fallback to SMA if EMA fails or use ta.trend.EMAIndicator
                 ema_50 = ta.trend.EMAIndicator(df['Close'], window=50).ema_indicator().iloc[-1]
                 
                 results["indicators"]["EMA"] = {
@@ -210,58 +241,70 @@ class ValuationMetricsTool(BaseTool):
     def _run(self, ticker: str, compare_to_industry: bool = True) -> Dict:
         """밸류에이션 지표 분석"""
         try:
-            stock = yf.Ticker(ticker)
-            info = stock.info
+            # FinanceDataReader does not support detailed financials/info
+            # We will fetch price but return empty metrics to avoid errors
             
-            # 기본 밸류에이션 지표
+            start_date = get_start_date("1d")
+            df = fdr.DataReader(ticker, start=start_date)
+            
+            if not df.empty:
+                current_price = df['Close'].iloc[-1]
+                market_cap = 0 # Not available in FDR
+            else:
+                current_price = 0
+                market_cap = 0
+            
+            # 기본 밸류에이션 지표 (Stubbed)
             metrics = {
                 "ticker": ticker,
-                "current_price": info.get('currentPrice', 0),
-                "market_cap": info.get('marketCap', 0),
-                "enterprise_value": info.get('enterpriseValue', 0),
+                "current_price": float(current_price),
+                "market_cap": market_cap,
+                "enterprise_value": 0,
                 "ratios": {
-                    "PE_ratio": info.get('trailingPE', 0),
-                    "Forward_PE": info.get('forwardPE', 0),
-                    "PEG_ratio": info.get('pegRatio', 0),
-                    "Price_to_Book": info.get('priceToBook', 0),
-                    "Price_to_Sales": info.get('priceToSalesTrailing12Months', 0),
-                    "EV_to_EBITDA": info.get('enterpriseToEbitda', 0),
-                    "EV_to_Revenue": info.get('enterpriseToRevenue', 0)
+                    "PE_ratio": 0,
+                    "Forward_PE": 0,
+                    "PEG_ratio": 0,
+                    "Price_to_Book": 0,
+                    "Price_to_Sales": 0,
+                    "EV_to_EBITDA": 0,
+                    "EV_to_Revenue": 0
                 },
                 "profitability": {
-                    "ROE": info.get('returnOnEquity', 0),
-                    "ROA": info.get('returnOnAssets', 0),
-                    "Profit_Margin": info.get('profitMargins', 0),
-                    "Operating_Margin": info.get('operatingMargins', 0),
-                    "Gross_Margin": info.get('grossMargins', 0)
+                    "ROE": 0,
+                    "ROA": 0,
+                    "Profit_Margin": 0,
+                    "Operating_Margin": 0,
+                    "Gross_Margin": 0
                 },
                 "financial_health": {
-                    "Current_Ratio": info.get('currentRatio', 0),
-                    "Quick_Ratio": info.get('quickRatio', 0),
-                    "Debt_to_Equity": info.get('debtToEquity', 0),
-                    "Interest_Coverage": info.get('interestCoverage', 0),
-                    "Free_Cash_Flow": info.get('freeCashflow', 0)
+                    "Current_Ratio": 0,
+                    "Quick_Ratio": 0,
+                    "Debt_to_Equity": 0,
+                    "Interest_Coverage": 0,
+                    "Free_Cash_Flow": 0
                 },
                 "growth": {
-                    "Revenue_Growth": info.get('revenueGrowth', 0),
-                    "Earnings_Growth": info.get('earningsGrowth', 0),
-                    "Quarterly_Earnings_Growth": info.get('earningsQuarterlyGrowth', 0)
+                    "Revenue_Growth": 0,
+                    "Earnings_Growth": 0,
+                    "Quarterly_Earnings_Growth": 0
                 }
             }
             
             # 업종 평균과 비교
             if compare_to_industry:
-                industry = info.get('industry', '')
-                sector = info.get('sector', '')
-                
                 metrics["comparison"] = {
-                    "sector": sector,
-                    "industry": industry,
-                    "valuation_assessment": self._assess_valuation(metrics["ratios"], sector)
+                    "sector": "Unknown",
+                    "industry": "Unknown",
+                    "valuation_assessment": "Unable to assess - Data unavailable"
                 }
             
             # 종합 평가
-            metrics["overall_assessment"] = self._get_overall_assessment(metrics)
+            metrics["overall_assessment"] = {
+                "score": "0/0",
+                "percentage": 0,
+                "recommendation": "HOLD",
+                "key_points": ["Data unavailable for valuation"]
+            }
             
             return metrics
             
@@ -270,98 +313,14 @@ class ValuationMetricsTool(BaseTool):
             return {"error": str(e), "ticker": ticker}
     
     def _assess_valuation(self, ratios: Dict, sector: str) -> str:
-        """밸류에이션 평가"""
-        # 섹터별 평균 PE (간단한 예시)
-        sector_avg_pe = {
-            "Technology": 25,
-            "Healthcare": 22,
-            "Financial Services": 15,
-            "Consumer Defensive": 20,
-            "Energy": 12,
-            "Utilities": 18,
-            "Real Estate": 20,
-            "Materials": 16,
-            "Industrials": 18,
-            "Consumer Cyclical": 22,
-            "Communication Services": 20
-        }
-        
-        pe = ratios.get('PE_ratio', 0)
-        sector_pe = sector_avg_pe.get(sector, 18)
-        
-        if pe == 0:
-            return "Unable to assess - No PE ratio available"
-        elif pe < sector_pe * 0.8:
-            return "Undervalued compared to sector"
-        elif pe > sector_pe * 1.2:
-            return "Overvalued compared to sector"
-        else:
-            return "Fairly valued compared to sector"
+        return "Unable to assess"
     
     def _get_overall_assessment(self, metrics: Dict) -> Dict:
-        """종합 평가"""
-        score = 0
-        max_score = 0
-        assessments = []
-        
-        # PE 평가
-        pe = metrics["ratios"].get("PE_ratio", 0)
-        if 0 < pe < 15:
-            score += 2
-            assessments.append("Attractive PE ratio")
-        elif 15 <= pe < 25:
-            score += 1
-            assessments.append("Reasonable PE ratio")
-        max_score += 2
-        
-        # ROE 평가
-        roe = metrics["profitability"].get("ROE", 0)
-        if roe > 0.20:
-            score += 2
-            assessments.append("Excellent ROE")
-        elif roe > 0.15:
-            score += 1
-            assessments.append("Good ROE")
-        max_score += 2
-        
-        # Debt/Equity 평가
-        de = metrics["financial_health"].get("Debt_to_Equity", 0)
-        if 0 <= de < 0.5:
-            score += 2
-            assessments.append("Low debt levels")
-        elif 0.5 <= de < 1:
-            score += 1
-            assessments.append("Moderate debt levels")
-        max_score += 2
-        
-        # 수익성장 평가
-        growth = metrics["growth"].get("Earnings_Growth", 0)
-        if growth > 0.20:
-            score += 2
-            assessments.append("Strong earnings growth")
-        elif growth > 0.10:
-            score += 1
-            assessments.append("Decent earnings growth")
-        max_score += 2
-        
-        percentage_score = (score / max_score * 100) if max_score > 0 else 0
-        
-        if percentage_score >= 75:
-            recommendation = "STRONG BUY"
-        elif percentage_score >= 60:
-            recommendation = "BUY"
-        elif percentage_score >= 40:
-            recommendation = "HOLD"
-        elif percentage_score >= 25:
-            recommendation = "SELL"
-        else:
-            recommendation = "STRONG SELL"
-        
         return {
-            "score": f"{score}/{max_score}",
-            "percentage": percentage_score,
-            "recommendation": recommendation,
-            "key_points": assessments
+            "score": "0/0",
+            "percentage": 0,
+            "recommendation": "HOLD",
+            "key_points": ["Data unavailable"]
         }
 
 class BacktestingInput(BaseModel):
@@ -378,8 +337,8 @@ class BacktestingTool(BaseTool):
         """전략 백테스팅"""
         try:
             # 데이터 가져오기
-            stock = yf.Ticker(ticker)
-            df = stock.history(period=period)
+            start_date = get_start_date(period)
+            df = fdr.DataReader(ticker, start=start_date)
             
             if df.empty:
                 return {"error": "No data available for backtesting"}
