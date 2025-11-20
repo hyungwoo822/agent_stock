@@ -1,8 +1,12 @@
 # requirements.txt
-langchain==0.1.0
-langchain-openai==0.0.5
-langgraph==0.0.20
-openai==1.10.0
+langchain==0.2.0
+langchain-core>=0.2.12
+langchain-openai==0.1.12
+langgraph==0.2.3
+langgraph-checkpoint==1.0.2
+langgraph-checkpoint-postgres==1.0.3
+langgraph-checkpoint-sqlite==1.0.0
+openai==1.40.0
 yfinance==0.2.33
 pandas==2.1.4
 numpy==1.26.2
@@ -16,8 +20,11 @@ faiss-cpu==1.7.4
 qdrant-client==1.7.0
 fastapi==0.108.0
 uvicorn==0.25.0
-pydantic==2.5.3
-python-dotenv==1.0.0
+pydantic>=2.0.0
+python-dotenv>=1.0.0
 cryptography==41.0.7
 pypdf==3.17.4
 newspaper3k==0.2.8
+fastapi
+uvicorn
+redis

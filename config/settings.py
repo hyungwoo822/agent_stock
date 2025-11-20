@@ -1,6 +1,6 @@
 import os
 from typing import Dict, List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -35,10 +35,10 @@ class Config:
     STOP_LOSS_PERCENTAGE: float = 0.05
     
     # Rate Limiting
-    API_RATE_LIMIT: Dict[str, int] = {
-        "yahoo": 100,  # per hour
-        "news": 500,   # per day
-        "alpha_vantage": 5  # per minute
-    }
+    API_RATE_LIMIT: Dict[str, int] = field(default_factory=lambda: {
+        "yahoo": 100,        # per hour
+        "news": 500,         # per day
+        "alpha_vantage": 5   # per minute
+    })
 
 config = Config()
